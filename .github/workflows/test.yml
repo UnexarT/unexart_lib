@@ -28,7 +28,7 @@ jobs:
 
     - name: Run tests and generate report
       run: |
-        pytest --html=report.html --self-contained-html
+        python tests\test.py
 
     - name: Upload HTML report as artifact
       uses: actions/upload-artifact@v4
