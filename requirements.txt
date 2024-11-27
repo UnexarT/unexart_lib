@@ -34,3 +34,4 @@ urllib3==2.2.3
 zipp==3.21.0
 pytest
 pytest-html
+unexart_lib
