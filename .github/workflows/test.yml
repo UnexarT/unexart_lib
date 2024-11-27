@@ -1,44 +1,52 @@
-name: Test
+name: Run Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
+  build:
+    runs-on: windows-latest
 
-  test-on-diff-version:
-    name: test-diff
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.x']
-      
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9.12' 
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-html
 
-      - name: Run tests and generate report
-        run: |
-          pytest --html=report.html --self-contained-html
-      - name: Run tests
-        run: |
-          python -m pytest test_main.py
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report
-          path: report.html
-      - name: Upload code as artifact
-        if: success() 
-        uses: actions/upload-artifact@v4
-        with:
-          name: source-code
-          path: .
+    - name: Run tests and generate report
+      run: |
+        pytest tests\test.py --html=report.html --self-contained-html
+
+    - name: Upload HTML report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report
+        path: report.html
+
+    - name: Upload source code as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: source-code
+        path: .
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - name: Deploy code
+      run: |
+        echo "Deploying code..."
