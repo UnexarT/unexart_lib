@@ -38,12 +38,3 @@ jobs:
       with:
         name: source-code
         path: .
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-
-    steps:
-    - name: Deploy code
-      run: |
-        echo "Deploying code..."
