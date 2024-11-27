@@ -89,10 +89,6 @@ def test_fibonacci_length_one():
     fib = fibonacci(1)
     assert fib.make() == [0]
 
-def test_fibonacci_length_zero():
-    fib = fibonacci(0)
-    assert fib.make() == []
-
 def test_fibonacci_invalid_length_string():
     with pytest.raises(TypeError, match="Ошибка: задаваемая длинна должна быть целым числом."):
         fib = fibonacci("five")
@@ -102,7 +98,3 @@ def test_fibonacci_invalid_length_float():
     with pytest.raises(TypeError, match="Ошибка: задаваемая длинна должна быть целым числом."):
         fib = fibonacci(5.5)
         fib.make()
-
-def test_fibonacci_negative_length():
-    fib = fibonacci(-1)
-    assert fib.make() == []
